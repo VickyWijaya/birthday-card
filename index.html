@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Selamat Ulang Tahun, Kamu yang Manis</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Great+Vibes&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
+      font-family: 'Playfair Display', serif;
+      color: #f8f0df;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    .container {
+      z-index: 2;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.2em;
+      color: #ffcfcf;
+      margin-bottom: 30px;
+      animation: fadeInDown 3s ease forwards;
+    }
+
+    .message {
+      font-size: 1.3em;
+      margin: 20px;
+      max-width: 700px;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.07);
+      border: 1px solid #ff9a9a;
+      border-radius: 15px;
+      min-height: 120px;
+      width: 80%;
+      position: relative;
+      overflow: hidden;
+      white-space: pre-wrap;
+    }
+
+    .message::after {
+      content: "|";
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      animation: blink 0.7s infinite;
+      color: #ff9a9a;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn {
+      margin-top: 25px;
+      padding: 14px 28px;
+      background-color: #ff9a9a;
+      color: white;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .btn:hover {
+      background-color: #cc7b7b;
+      transform: scale(1.05);
+    }
+
+    #quiz {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .quiz-question {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+
+    .quiz-options button {
+      display: block;
+      margin: 8px auto;
+      padding: 8px 16px;
+      font-size: 1em;
+      background-color: #d75d5d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .quiz-options button:hover {
+      background-color: #c44444;
+    }
+  </style>
+</head>
+<body onload="generateStars()">
+
+  <div class="stars" id="stars"></div>
+
+  <div class="container">
+    <h1>Selamat Ulang Tahun, Kamu yang Manis 🌹</h1>
+    <div id="message" class="message"></div>
+    <button id="nextBtn" class="btn" onclick="handleNext()">➤ Lanjut, Cantik</button>
+
+    <div id="quiz">
+      <div class="quiz-question">🎁 Apa warna lilin ulang tahun yang paling umum?</div>
+      <div class="quiz-options">
+        <button onclick="checkAnswer(true)">Putih</button>
+        <button onclick="checkAnswer(false)">Biru</button>
+        <button onclick="checkAnswer(false)">Merah</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Player Lokal -->
+  <audio id="drive-audio" style="display: none;">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Fungsi untuk memutar musik
+    function startMusic() {
+      const audio = document.getElementById('drive-audio');
+      audio.currentTime = 47; // Mulai dari detik 47
+      
+      audio.play().catch(error => {
+        console.log('Autoplay dicegah: ', error);
+        audio.style.display = 'block'; // Tampilkan kontrol audio jika error
+      });
+    }
+
+    // Fungsi animasi dan konten
+    const messages = [
+      "✨ Hari ini bukan hari biasa, karena dunia pernah menerima seseorang seistimewa kamu di hari ini ❤️",
+      "🎂 Di dunia yang terus bergerak cepat, penuh riuh dan tuntutan yang datang tanpa henti, kehadiranmu bagiku seperti jeda yang menyembuhkan. 🌿 Seperti ruang tenang di tengah hiruk-pikuk kota, atau tempat berteduh saat langit sedang deras menangis. Kehadiranmu mengingatkanku bahwa tidak semua hal harus diselesaikan dengan tergesa—ada nilai dalam diam, dalam hadir, dalam mendengarkan. Terima kasih karena tanpa sadar, kamu sudah menjadi bagian dari ruang nyaman itu.",
+      "🚶‍♀️ Kadang kita tidak selalu berjalan di jalan yang sama, tidak selalu saling tahu kabar hari demi hari, tapi ada sesuatu yang tetap: rasa percaya itu. Bahwa meskipun jarak bisa hadir, niat baik dan ingatan yang tulus tidak akan pudar. 🕊️ Seperti bintang-bintang yang tetap bersinar meski tertutup awan malam, keberadaanmu memberi arti bahkan tanpa kata-kata. Dan itu membuat dunia ini terasa sedikit lebih bisa ditanggung.",
+      "🌻 Terima kasih karena tetap menjadi kamu. Bukan versi sempurna, bukan versi yang selalu kuat, tapi versi yang jujur dan utuh. Versi yang tahu kapan harus tertawa dan kapan boleh lelah. Kamu adalah bukti bahwa seseorang tidak harus keras untuk kuat, tidak harus bising untuk berarti. Semoga langkahmu ke depan selalu dijaga semesta, dengan cahaya yang cukup untuk membimbingmu, bahkan saat kamu merasa ragu melangkah. Dan semoga kamu selalu dikelilingi oleh hal-hal yang membuatmu merasa cukup—cukup dicintai, cukup dihargai, cukup menjadi dirimu sendiri. ✨",
+      "🎉 Selamat ulang tahun, cantik. Terima kasih sudah ada... dan tetaplah menjadi cahaya paling hangat di semesta 💖"
+    ];
+
+    let current = 0;
+    let musicStarted = false;
+    let isTyping = false;
+
+    function handleNext() {
+      if (!musicStarted) {
+        startMusic();
+        musicStarted = true;
+      }
+      if (!isTyping) showNext();
+    }
+
+    function typeWriter(text, element, speed = 30) {
+      return new Promise((resolve) => {
+        let i = 0;
+        element.innerHTML = '';
+        isTyping = true;
+        
+        function type() {
+          if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+          } else {
+            isTyping = false;
+            resolve();
+          }
+        }
+        type();
+      });
+    }
+
+    async function showNext() {
+      const box = document.getElementById("message");
+      const btn = document.getElementById("nextBtn");
+      
+      if (current < messages.length) {
+        btn.disabled = true;
+        await typeWriter(messages[current], box);
+        current++;
+        
+        if (current === messages.length) {
+          btn.innerText = "💌 Buka Kado Terakhir";
+        }
+        btn.disabled = false;
+      } else {
+        btn.style.display = 'none';
+        showQuiz();
+      }
+    }
+
+    function generateStars() {
+      const stars = document.getElementById("stars");
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        stars.appendChild(star);
+      }
+    }
+
+    function showQuiz() {
+      document.getElementById("quiz").style.display = 'block';
+      document.getElementById("message").innerHTML = "📚 Tapi tunggu dulu... ada satu pertanyaan kecil sebelum kamu lanjut 🎈";
+    }
+
+    function checkAnswer(correct) {
+      if (correct) {
+        alert("🎉 Benar! Seperti kamu, putih itu murni dan indah~ 😘");
+      } else {
+        alert("Ups! Jawaban yang benar itu putih, seperti ketulusan doaku untuk kamu 🎂");
+      }
+    }
+  </script>
+</body>
+</html>
